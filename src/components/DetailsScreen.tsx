@@ -9,10 +9,16 @@ interface DetailsScreenProps {
   canvasRef: React.RefObject<HTMLCanvasElement>;
   onCapture: () => void;
   onBack: () => void;
+  startCamera: () => Promise<void>;
 }
 
-const DetailsScreen: React.FC<DetailsScreenProps> = ({ employee, videoRef, canvasRef, onCapture, onBack }) => {
+const DetailsScreen: React.FC<DetailsScreenProps> = ({ employee, videoRef, canvasRef, onCapture, onBack, startCamera }) => {
   const [showCamera, setShowCamera] = useState(false);
+
+  const handleCaptureClick = () => {
+    setShowCamera(true);
+    startCamera();
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
@@ -51,7 +57,7 @@ const DetailsScreen: React.FC<DetailsScreenProps> = ({ employee, videoRef, canva
 
           {!showCamera ? (
             <button
-              onClick={() => setShowCamera(true)}
+              onClick={handleCaptureClick}
               className="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-lg hover:shadow-lg transition flex items-center justify-center gap-2"
             >
               <Camera size={24} /> Capture Photo
