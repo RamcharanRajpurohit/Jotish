@@ -13,7 +13,10 @@ export default function Home() {
   const { setEmployees } = useAppContext();
 
   const handleLogin = async () => {
-    if (username === 'testuser' && password === 'Test123') {
+    if (
+      username === process.env.NEXT_PUBLIC_USERNAME && 
+      password === process.env.NEXT_PUBLIC_PASSWORD
+    ) {
       setLoading(true);
       try {
         const employeeData = await fetchEmployees();
@@ -26,7 +29,7 @@ export default function Home() {
         setLoading(false);
       }
     } else {
-      alert('Invalid credentials. Use testuser / Test123');
+      alert(`Invalid credentials. Use ${process.env.NEXT_PUBLIC_USERNAME} / ${process.env.NEXT_PUBLIC_PASSWORD}`);
     }
   };
 

@@ -1,5 +1,8 @@
 'use client';
+
+import AuthCheck from '../../components/AuthCheck';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import PhotoResultScreen from '../../components/PhotoResultScreen';
 import { useAppContext } from '../../context/AppContext';
 
@@ -7,18 +10,25 @@ export default function Photo() {
   const router = useRouter();
   const { capturedImage, setCapturedImage } = useAppContext();
 
+  useEffect(() => {
+    if (!capturedImage) {
+      router.push('/list');
+    }
+  }, [capturedImage, router]);
+
   if (!capturedImage) {
-    router.push('/list');
     return null;
   }
 
   return (
-    <PhotoResultScreen
-      image={capturedImage}
-      onBack={() => {
-        setCapturedImage(null);
-        router.push('/list');
-      }}
-    />
+    <AuthCheck>
+      <PhotoResultScreen
+        image={capturedImage}
+        onBack={() => {
+          setCapturedImage(null);
+          router.push('/list');
+        }}
+      />
+    </AuthCheck>
   );
 }

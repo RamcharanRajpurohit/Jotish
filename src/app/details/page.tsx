@@ -3,6 +3,8 @@ import { useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import DetailsScreen from '../../components/DetailsScreen';
 import { useAppContext } from '../../context/AppContext';
+import AuthCheck from '../../components/AuthCheck';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 export default function Details() {
   const router = useRouter();
@@ -43,19 +45,18 @@ export default function Details() {
     }
   };
 
-  if (!selectedEmployee) {
-    router.push('/list');
-    return null;
-  }
-
   return (
-    <DetailsScreen
-      employee={selectedEmployee}
-      videoRef={videoRef}
-      canvasRef={canvasRef}
-      onCapture={capturePhoto}
-      onBack={() => router.push('/list')}
-      startCamera={startCamera}
-    />
+    <AuthCheck>
+      { !selectedEmployee ? <LoadingSpinner /> : (
+        <DetailsScreen
+          employee={selectedEmployee}
+          videoRef={videoRef}
+          canvasRef={canvasRef}
+          onCapture={capturePhoto}
+          onBack={() => router.push('/list')}
+          startCamera={startCamera}
+        />
+      )}
+    </AuthCheck>
   );
 }

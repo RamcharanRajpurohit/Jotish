@@ -1,5 +1,6 @@
 'use client';
 import { useRouter } from 'next/navigation';
+import AuthCheck from '../../components/AuthCheck';
 import ChartScreen from '../../components/ChartScreen';
 import { useAppContext } from '../../context/AppContext';
 
@@ -13,9 +14,11 @@ export default function Chart() {
   }
 
   return (
-    <ChartScreen
-      employees={employees}
-      onBack={() => router.push('/list')}
-    />
+    <AuthCheck>
+      <ChartScreen
+        employees={employees}
+        onBack={() => router.push('/list')}
+      />
+    </AuthCheck>
   );
 }

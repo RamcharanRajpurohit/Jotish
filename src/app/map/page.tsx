@@ -2,6 +2,7 @@
 import { useRouter } from 'next/navigation';
 import MapScreen from '../../components/MapScreen';
 import { useAppContext } from '../../context/AppContext';
+import AuthCheck from '../../components/AuthCheck';
 
 export default function Map() {
   const router = useRouter();
@@ -13,9 +14,11 @@ export default function Map() {
   }
 
   return (
-    <MapScreen
-      employees={employees}
-      onBack={() => router.push('/list')}
-    />
+    <AuthCheck>
+      <MapScreen
+        employees={employees}
+        onBack={() => router.push('/list')}
+      />
+    </AuthCheck>
   );
 }
