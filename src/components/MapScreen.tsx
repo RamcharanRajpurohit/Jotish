@@ -40,15 +40,15 @@ const MapScreen: React.FC<MapScreenProps> = ({ employees, onBack }) => {
   }));
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
-      <button onClick={onBack} className="mb-6 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">← Back</button>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-stone-100 p-6">
+      <button onClick={onBack} className="mb-6 px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition">← Back</button>
 
       <div className="max-w-5xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
           <h1 className="text-3xl font-bold text-gray-800 mb-6">🗺️ Employees by City</h1>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {cityCounts.map((item, index) => (
-              <div key={index} className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg p-6 text-white shadow-lg">
+              <div key={index} className="bg-gradient-to-br from-gray-700 to-stone-800 rounded-lg p-6 text-white shadow-lg">
                 <p className="text-4xl font-bold">{item.count}</p>
                 <p className="text-lg font-semibold">{item.city}</p>
               </div>
@@ -85,7 +85,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ employees, onBack }) => {
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Employee Details by City</h2>
           <div className="space-y-4">
             {cityCounts.map((item, index) => (
-              <div key={index} className="border-l-4 border-blue-500 pl-4 py-2">
+              <div key={index} className="border-l-4 border-gray-500 pl-4 py-2">
                 <p className="font-bold text-lg text-gray-800">{item.city}</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
                   {employees.filter(emp => emp.office === item.city).map((emp, i) => (
