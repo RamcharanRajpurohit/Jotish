@@ -13,8 +13,24 @@ export async function POST(req: Request) {
       body: JSON.stringify(body),
     });
 
-    const data = await res.text(); // PHP sometimes returns text
-    return new Response(data, {
+    if (!res.ok) {
+      throw new Error(`Backend API failed with status: ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    // Data cleaning: Correct city names before sending to frontend
+    if (data.TABLE_DATA && data.TABLE_DATA.data) {
+      data.TABLE_DATA.data = data.TABLE_DATA.data.map((row: string[]) => {
+        // Correct "Sidney" to "Sydney"
+        if (row[2] === "Sidney") {
+          row[2] = "Sydney";
+        }
+        return row;
+      });
+    }
+
+    return new Response(JSON.stringify(data), {
       headers: { "Content-Type": "application/json" },
     });
   } catch (err) {
