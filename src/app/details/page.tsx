@@ -47,16 +47,24 @@ export default function Details() {
 
   return (
     <AuthCheck>
-      { !selectedEmployee ? <LoadingSpinner /> : (
-        <DetailsScreen
-          employee={selectedEmployee}
-          videoRef={videoRef}
-          canvasRef={canvasRef}
-          onCapture={capturePhoto}
-          onBack={() => router.push('/list')}
-          startCamera={startCamera}
-        />
-      )}
+      <div className="w-full min-h-screen">
+        {!selectedEmployee ? (
+          <div className="flex justify-center items-center h-screen">
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <div className="w-full px-2 sm:px-4 md:px-6">
+            <DetailsScreen
+              employee={selectedEmployee}
+              videoRef={videoRef}
+              canvasRef={canvasRef}
+              onCapture={capturePhoto}
+              onBack={() => router.push('/list')}
+              startCamera={startCamera}
+            />
+          </div>
+        )}
+      </div>
     </AuthCheck>
   );
 }

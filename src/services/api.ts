@@ -1,19 +1,11 @@
 import { Employee } from '../types/employee';
-
-/**
- * Fetches and parses employee data from the API proxy.
- * @returns A promise that resolves to an array of Employee objects.
- */
 export const fetchEmployees = async (): Promise<Employee[]> => {
-  // The proxy API call doesn't actually need username/password for this demo,
-  // but in a real app you would pass credentials here.
   const response = await fetch("/api/proxy", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      // Dummy credentials as per original code
       username: "test",
       password: "123456",
     }),

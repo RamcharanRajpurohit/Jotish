@@ -1,5 +1,5 @@
-"use client";
-import { useState } from 'react';
+'use client';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { fetchEmployees } from '../services/api';
 import LoginScreen from '../components/LoginScreen';
@@ -10,11 +10,11 @@ export default function Home() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { setEmployees } = useAppContext();
+  const { setEmployees, employees } = useAppContext();
 
   const handleLogin = async () => {
     if (
-      username === process.env.NEXT_PUBLIC_USERNAME && 
+      username === process.env.NEXT_PUBLIC_USERNAME &&
       password === process.env.NEXT_PUBLIC_PASSWORD
     ) {
       setLoading(true);
@@ -32,6 +32,12 @@ export default function Home() {
       alert(`Invalid credentials. Use ${process.env.NEXT_PUBLIC_USERNAME} / ${process.env.NEXT_PUBLIC_PASSWORD}`);
     }
   };
+
+  useEffect(() => {
+    if (employees && employees.length > 0) {
+      router.push('/list');
+    }
+  }, [employees]);
 
   return (
     <LoginScreen

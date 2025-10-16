@@ -18,26 +18,31 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     try {
       const savedState = localStorage.getItem('appState');
       if (savedState) {
         const { employees, selectedEmployee, capturedImage } = JSON.parse(savedState);
-        if (employees) setEmployees(employees);
-        if (selectedEmployee) setSelectedEmployee(selectedEmployee);
-        if (capturedImage) setCapturedImage(capturedImage);
+        setEmployees(employees || []);
+        setSelectedEmployee(selectedEmployee || null);
+        setCapturedImage(capturedImage || null);
       }
     } catch (error) {
       console.error("Failed to parse state from localStorage", error);
       localStorage.removeItem('appState');
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    const appState = { employees, selectedEmployee, capturedImage };
-    localStorage.setItem('appState', JSON.stringify(appState));
-  }, [employees, selectedEmployee, capturedImage]);
+    if (!loading) {
+      const appState = { employees, selectedEmployee, capturedImage };
+      localStorage.setItem('appState', JSON.stringify(appState));
+    }
+  }, [employees, selectedEmployee, capturedImage, loading]);
 
   const handleLogout = () => {
     setEmployees([]);
@@ -45,6 +50,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     setCapturedImage(null);
     localStorage.removeItem('appState');
   };
+
+  if (loading) return <div>Loading session...</div>;
 
   return (
     <AppContext.Provider value={{
