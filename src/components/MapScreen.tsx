@@ -1,15 +1,12 @@
+'use client';
+
 import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
+import dynamic from 'next/dynamic';
 import type { Employee } from '../types/employee';
 
-// Fix for default icon issue in React-Leaflet
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
-  iconUrl: require('leaflet/dist/images/marker-icon.png'),
-  shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+// 👇 Import MapComponent dynamically (no SSR)
+const MapComponent = dynamic(() => import('./MapComponent'), {
+  ssr: false,
 });
 
 interface MapScreenProps {
@@ -33,7 +30,7 @@ const cityCoordinates: { [key: string]: [number, number] } = {
 };
 
 const MapScreen: React.FC<MapScreenProps> = ({ employees, onBack }) => {
-  const cities: string[] = [...new Set(employees.map(emp => emp.office))];
+  const cities = [...new Set(employees.map(emp => emp.office))];
   const cityCounts: CityCount[] = cities.map(city => ({
     city,
     count: employees.filter(emp => emp.office === city).length,
@@ -58,43 +55,7 @@ const MapScreen: React.FC<MapScreenProps> = ({ employees, onBack }) => {
 
         <div className="bg-white rounded-xl shadow-lg p-8 mb-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">City Locations on Map</h2>
-          <MapContainer center={[25, 0]} zoom={2} scrollWheelZoom={false} style={{ height: '400px', width: '100%' }} className="rounded-lg">
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
-            {cityCounts.map(item => {
-              const position = cityCoordinates[item.city];
-              if (!position) return null;
-              return (
-                <Marker key={item.city} position={position}>
-                  <Popup>
-                    <strong>{item.city}</strong><br />
-                    {item.count} employees
-                  </Popup>
-                  <Tooltip>
-                    <span>{item.city}: {item.count} employees</span>
-                  </Tooltip>
-                </Marker>
-              );
-            })}
-          </MapContainer>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Employee Details by City</h2>
-          <div className="space-y-4">
-            {cityCounts.map((item, index) => (
-              <div key={index} className="border-l-4 border-gray-500 pl-4 py-2">
-                <p className="font-bold text-lg text-gray-800">{item.city}</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
-                  {employees.filter(emp => emp.office === item.city).map((emp, i) => (
-                    <p key={i} className="text-sm text-gray-600">• {emp.name}</p>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
+          <MapComponent cityCounts={cityCounts} cityCoordinates={cityCoordinates} />
         </div>
       </div>
     </div>
