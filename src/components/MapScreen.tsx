@@ -2,7 +2,7 @@ import React from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { Employee } from '../types/employee';
+import type { Employee } from '../types/employee';
 
 // Fix for default icon issue in React-Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
